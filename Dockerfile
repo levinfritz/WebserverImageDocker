@@ -12,6 +12,9 @@ RUN sed -i 's/Listen 80/Listen 80/' /etc/apache2/ports.conf
 # Enable required Apache modules
 RUN a2enmod rewrite
 
+# Remove default Apache content
+RUN rm -rf /var/www/html/*
+
 # Create directory for mounted volumes
 RUN mkdir -p /var/www/html
 RUN mkdir -p /var/log/apache2
