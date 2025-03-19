@@ -1,81 +1,106 @@
-# Docker Apache Webserver Dokumentation
-
-## Projektübersicht
-Dieses Projekt implementiert einen Apache Webserver in einem Docker Container. Die Webseite ist über Port 8080 erreichbar, und sowohl die Webseiten-Dateien als auch die Logdateien werden in lokalen Verzeichnissen auf dem Host-System gespeichert.
-
-## Projektstruktur
-```
-.
-├── Dockerfile              # Docker-Build-Anweisungen
-├── website/               # Enthält die Webseiten-Dateien
-│   └── index.html        # Beispiel-Webseite
-├── logs/                 # Apache-Logdateien
-└── README.md             # Projekt-Readme
-```
-
-## Dockerfile-Erklärung
-Das Dockerfile enthält folgende wichtige Komponenten:
-- Basiert auf Ubuntu 22.04
-- Installiert Apache2
-- Konfiguriert Apache für Port 80 (wird auf Host-Port 8080 gemappt)
-- Erstellt notwendige Verzeichnisse für Volumes
-- Leitet Logs auf stdout/stderr um
-
-## Verwendung
-
-### 1. Repository klonen
-```bash
-git clone [repository-url]
-cd WebserverImageDocker
-```
-
-### 2. Docker Image erstellen
-```bash
-docker build -t apache-webserver .
-```
-
-### 3. Container starten
-```bash
-docker run -d \
-  -p 8080:80 \
-  -v $(pwd)/website:/var/www/html \
-  -v $(pwd)/logs:/var/log/apache2 \
-  --name apache-container \
-  apache-webserver
-```
-
-### Parameter-Erklärung:
-- `-d`: Startet den Container im Hintergrund
-- `-p 8080:80`: Mappt Port 8080 des Hosts auf Port 80 des Containers
-- `-v $(pwd)/website:/var/www/html`: Mounted das lokale website-Verzeichnis
-- `-v $(pwd)/logs:/var/log/apache2`: Mounted das lokale logs-Verzeichnis
-
-### 4. Webseite aufrufen
-Die Webseite ist nach dem Start unter `http://localhost:8080` erreichbar.
-
-## Nützliche Docker-Befehle
-
-### Container Status prüfen
-```bash
-docker ps
-```
-
-### Container Logs anzeigen
-```bash
-docker logs apache-container
-```
-
-### Container stoppen
-```bash
-docker stop apache-container
-```
-
-### Container entfernen
-```bash
-docker rm apache-container
-```
-
-## Dateien bearbeiten
-- Webseiten-Dateien können im `website/` Verzeichnis bearbeitet werden
-- Die Änderungen sind sofort im Browser sichtbar
-- Logdateien werden im `logs/` Verzeichnis gespeichert
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Docker Apache Webserver</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 1rem 0;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 20px;
+        }
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        h1 {
+            margin-top: 0;
+            color: #fff;
+        }
+        h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 0.5rem;
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        .feature-item {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+        }
+        .feature-item:hover {
+            transform: translateY(-5px);
+        }
+        .feature-item h3 {
+            color: #3498db;
+            margin-top: 0;
+        }
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 1rem 0;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Docker Apache Webserver</h1>
+    </header>
+    
+    <div class="container">
+        <div class="card">
+            <h2>Willkommen auf meinem Docker Apache Webserver</h2>
+            <p>Diese Webseite läuft in einem Docker Container mit Apache auf Port 8080. Der Container wurde erfolgreich gestartet und die Webseite ist nun über den Browser erreichbar.</p>
+            <p>Dieses Projekt demonstriert die Verwendung von Docker zur Containerisierung eines Webservers mit Apache.</p>
+        </div>
+        
+        <h2>Funktionen des Projekts</h2>
+        <div class="feature-grid">
+            <div class="feature-item">
+                <h3>Docker Container</h3>
+                <p>Die Anwendung läuft in einem isolierten Docker-Container, der einfach zu verwalten und zu skalieren ist.</p>
+            </div>
+            <div class="feature-item">
+                <h3>Apache Webserver</h3>
+                <p>Verwendet den zuverlässigen Apache HTTP Server für das Hosting der Webseite.</p>
+            </div>
+            <div class="feature-item">
+                <h3>Volume Mounting</h3>
+                <p>Webseiten-Dateien und Logs werden in lokalen Verzeichnissen gespeichert und in den Container gemountet.</p>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>&copy; 2025 Docker Apache Webserver Projekt</p>
+    </footer>
+</body>
+</html>

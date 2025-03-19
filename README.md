@@ -15,22 +15,48 @@ This project contains a Docker setup for running an Apache web server with a sim
 - Docker installed on your system
 - Git (to clone this repository)
 
-## Quick Start
-1. Clone this repository
-2. Build the Docker image:
-   ```bash
-   docker build -t my-apache-server .
-   ```
-3. Run the container:
-   ```bash
-   docker run -d -p 8080:80 \
-     -v $(pwd)/website:/var/www/html \
-     -v $(pwd)/logs:/var/log/apache2 \
-     --name my-apache-container my-apache-server
-   ```
-4. Access the website at `http://localhost:8080`
+# Ubuntu-Installationsanleitung für Docker und Webserver
 
-## Directory Structure
-- `website/`: Contains the website files (HTML, CSS, etc.)
-- `logs/`: Contains Apache server logs
-- `Dockerfile`: Contains instructions to build the Docker image
+## 1. Projekt einrichten
+
+```bash
+# Git installieren falls noch nicht vorhanden
+sudo apt install -y git
+
+# Repository klonen
+git clone https://github.com/levinfritz/WebserverImageDocker.git
+cd WebserverImageDocker
+
+# Verzeichnisse erstellen
+mkdir -p website logs
+```
+
+## 2. Docker Image erstellen und Container starten
+
+```bash
+# Docker Image bauen
+docker build -t apache-webserver .
+
+# Container starten
+docker run -d \
+  -p 8080:80 \
+  -v "$(pwd)/website":/var/www/html \
+  -v "$(pwd)/logs":/var/log/apache2 \
+  --name apache-container \
+  apache-webserver
+```
+
+## 3. Überprüfen der Installation
+
+```bash
+# Container-Status prüfen
+docker ps
+
+# Logs anzeigen (falls nötig)
+docker logs apache-container
+```
+
+## 4. Webseite aufrufen
+Öffnen Sie einen Webbrowser und navigieren Sie zu:
+```
+http://localhost:8080
