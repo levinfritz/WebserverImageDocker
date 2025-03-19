@@ -1,62 +1,42 @@
-# Apache Webserver Docker Project
+# Webserver-Image mit Apache in Docker
 
-This project contains a Docker setup for running an Apache web server with a simple website. The server runs on port 8080 and uses volume mounting for website files and logs.
+## 1. Projektbeschreibung
+Dieses Projekt erstellt ein eigenes Docker-Image für einen Apache-Webserver, der eine einfache statische Webseite hostet. Die Webseiten-Dateien und Log-Dateien werden per Volume auf dem Host gespeichert.
 
-## Project Structure
-```
-.
-├── Dockerfile
-├── website/
-│   └── index.html
-└── logs/
-```
+## 2. Voraussetzungen
+- Installiertes Docker
+- Git für die Versionierung (optional)
 
-## Prerequisites
-- Docker installed on your system
-- Git (to clone this repository)
-
-# Ubuntu-Installationsanleitung für Docker und Webserver
-
-## 1. Projekt einrichten
-
-```bash
-# Git installieren falls noch nicht vorhanden
-sudo apt install -y git
-
-# Repository klonen
+## 3. Repository-Klonen
+```sh
 git clone https://github.com/levinfritz/WebserverImageDocker.git
 cd WebserverImageDocker
-
-# Verzeichnisse erstellen
-mkdir -p website logs
 ```
 
-## 2. Docker Image erstellen und Container starten
-
-```bash
-# Docker Image bauen
+## 4. Docker-Image bauen
+```sh
 docker build -t apache-webserver .
-
-# Container starten
-docker run -d \
-  -p 8080:80 \
-  -v "$(pwd)/website":/var/www/html \
-  -v "$(pwd)/logs":/var/log/apache2 \
-  --name apache-container \
-  apache-webserver
 ```
 
-## 3. Überprüfen der Installation
+## 5. Container starten
+```sh
+docker run -d -p 8080:80 -v $(pwd)/website:/usr/local/apache2/htdocs -v $(pwd)/logs:/var/log/apache2 --name apache-container apache-webserver
+```
 
-```bash
-# Container-Status prüfen
-docker ps
+## 6. Webseite aufrufen
+Öffne den Browser und gehe zu:
+```
+http://localhost:8080
+```
 
-# Logs anzeigen (falls nötig)
+## 7. Logs einsehen
+```sh
 docker logs apache-container
 ```
 
-## 4. Webseite aufrufen
-Öffnen Sie einen Webbrowser und navigieren Sie zu:
+## 8. Container stoppen und entfernen
+```sh
+docker stop apache-container
 ```
-http://localhost:8080
+```sh
+docker rm apache-container

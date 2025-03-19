@@ -1,81 +1,42 @@
-# Docker Apache Webserver Dokumentation
+# Dokumentation: Webserver-Image mit Apache in Docker
 
-## Projektübersicht
-Dieses Projekt implementiert einen Apache Webserver in einem Docker Container. Die Webseite ist über Port 8080 erreichbar, und sowohl die Webseiten-Dateien als auch die Logdateien werden in lokalen Verzeichnissen auf dem Host-System gespeichert.
+## Einleitung
+Dieses Projekt erstellt ein einfaches Docker-Image für einen Apache-Webserver, das eine statische Webseite hostet. Die Daten werden über Volumes gespeichert, sodass sie auch nach dem Entfernen des Containers erhalten bleiben.
+
+## Verwendete Technologien
+- **Docker**: Zur Containerisierung des Apache-Webservers
+- **Apache HTTP Server**: Webserver zum Bereitstellen der statischen Webseite
+- **Markdown**: Dokumentation des Projekts
 
 ## Projektstruktur
 ```
-.
-├── Dockerfile              # Docker-Build-Anweisungen
-├── website/               # Enthält die Webseiten-Dateien
-│   └── index.html        # Beispiel-Webseite
-├── logs/                 # Apache-Logdateien
-└── README.md             # Projekt-Readme
+WebserverImageDocker/
+├── website/                # Enthält die HTML-Dateien der Webseite
+│   ├── index.html          # Startseite
+├── logs/                   # Speichert die Apache-Log-Dateien
+├── Dockerfile              # Definition des Docker-Images
+├── README.md               # Anleitung zur Nutzung des Docker-Images
+├── documentation.md        # Detaillierte Erklärung des Projekts
 ```
 
-## Dockerfile-Erklärung
-Das Dockerfile enthält folgende wichtige Komponenten:
-- Basiert auf Ubuntu 22.04
-- Installiert Apache2
-- Konfiguriert Apache für Port 80 (wird auf Host-Port 8080 gemappt)
-- Erstellt notwendige Verzeichnisse für Volumes
-- Leitet Logs auf stdout/stderr um
-
-## Verwendung
-
-### 1. Repository klonen
-```bash
-git clone [repository-url]
-cd WebserverImageDocker
+## Dockerfile Erklärung
+Das **Dockerfile** basiert auf dem offiziellen `httpd`-Image und kopiert die statische Webseite in das Verzeichnis `/usr/local/apache2/htdocs/`.
+```dockerfile
+FROM httpd:latest
+WORKDIR /usr/local/apache2/htdocs/
+COPY ./website /usr/local/apache2/htdocs/
+EXPOSE 8080
+CMD ["httpd", "-D", "FOREGROUND"]
 ```
 
-### 2. Docker Image erstellen
-```bash
-docker build -t apache-webserver .
-```
-
-### 3. Container starten
-```bash
-docker run -d \
-  -p 8080:80 \
-  -v $(pwd)/website:/var/www/html \
+## Starten des Containers mit Volumes
+Der folgende Befehl startet den Apache-Webserver und bindet sowohl die Webseite als auch die Log-Dateien als Volumes ein:
+```sh
+docker run -d -p 8080:80 \
+  -v $(pwd)/website:/usr/local/apache2/htdocs \
   -v $(pwd)/logs:/var/log/apache2 \
-  --name apache-container \
-  apache-webserver
+  --name apache-container apache-webserver
 ```
 
-### Parameter-Erklärung:
-- `-d`: Startet den Container im Hintergrund
-- `-p 8080:80`: Mappt Port 8080 des Hosts auf Port 80 des Containers
-- `-v $(pwd)/website:/var/www/html`: Mounted das lokale website-Verzeichnis
-- `-v $(pwd)/logs:/var/log/apache2`: Mounted das lokale logs-Verzeichnis
-
-### 4. Webseite aufrufen
-Die Webseite ist nach dem Start unter `http://localhost:8080` erreichbar.
-
-## Nützliche Docker-Befehle
-
-### Container Status prüfen
-```bash
-docker ps
-```
-
-### Container Logs anzeigen
-```bash
-docker logs apache-container
-```
-
-### Container stoppen
-```bash
-docker stop apache-container
-```
-
-### Container entfernen
-```bash
-docker rm apache-container
-```
-
-## Dateien bearbeiten
-- Webseiten-Dateien können im `website/` Verzeichnis bearbeitet werden
-- Die Änderungen sind sofort im Browser sichtbar
-- Logdateien werden im `logs/` Verzeichnis gespeichert
+## Fazit
+Mit diesem Projekt kann eine einfache statische Webseite schnell in einem Docker-Container gehostet werden. Die Nutzung von Volumes stellt sicher, dass die Webseiten-Dateien und Logs auch nach dem Neustart des Containers erhalten bleiben.
